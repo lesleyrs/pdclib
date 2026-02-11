@@ -3,17 +3,19 @@
 OUTDIR = ../../wasmlite/libc
 
 CC = clang --target=wasm32
-WCC = ../../xcc/wcc
+WCC = ../../tools/xcc/wcc
 SRCS = functions/**/*.c
 CFLAGS = -Iinclude -std=c99
-OUT = libc-dbg.a libc.a wlibc.a
+OUT = libc-dbg.a libc.a
+# wlibc.a
 
 # TODO -flto breaks float printf
 libc.a: CFLAGS += -Oz -Wall -ffast-math #-flto
 libc-dbg.a: CFLAGS += -g -Wall
 wlibc.a: CC = $(WCC) -Dgoto=void* -D__builtin_trap=abort #-Wall
 
-all: $(OUT) crt1 wcrt0
+all: $(OUT) crt1
+# wcrt0
 
 $(OUT): clean
 	$(CC) $(CFLAGS) -c $(SRCS)
