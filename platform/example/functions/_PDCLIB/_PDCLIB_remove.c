@@ -12,19 +12,12 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern int unlink( const char * );
-
-#ifdef __cplusplus
-}
-#endif
+// extern int unlink( const char * );
 
 int _PDCLIB_remove( const char * pathname )
 {
-    return unlink( pathname );
+    return 0;
+    // return unlink( pathname );
 }
 
 #endif

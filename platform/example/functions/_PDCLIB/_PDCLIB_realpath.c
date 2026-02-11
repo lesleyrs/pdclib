@@ -16,7 +16,14 @@
 extern "C" {
 #endif
 
-extern char * realpath( const char * file_name, char * resolved_name );
+#define PATH_MAX 4096
+static char * realpath( const char * file_name, char * resolved_name )
+{
+    if (!file_name) return NULL;
+    strncpy(resolved_name, file_name, PATH_MAX - 1);
+    resolved_name[PATH_MAX - 1] = '\0';
+    return resolved_name;
+}
 
 #ifdef __cplusplus
 }
@@ -25,7 +32,7 @@ extern char * realpath( const char * file_name, char * resolved_name );
 char * _PDCLIB_realpath( const char * path )
 {
     /* TODO: PATH_MAX but that seems difficult to come by */
-    char buffer[ 4096 ];
+    char buffer[ PATH_MAX ];
     char * resolved_name;
 
     if ( realpath( path, buffer ) == NULL )

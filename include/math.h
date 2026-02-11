@@ -192,9 +192,9 @@ long double frexpl( long double value, int * exp );
  * Returns FP_ILOGB0 if x is zero, INT_MAX if x is infinite,
  * FP_ILOGBNAN if x is a NaN. Range error may occur if x is 0.
 */
-double ilogb( double x );
-float ilogbf( float x );
-long double ilogbl( long double x );
+int ilogb( double x );
+int ilogbf( float x );
+int ilogbl( long double x );
 
 /* Multiply x by 2^exp. Range error may occur. */
 double ldexp( double x, int exp );
@@ -254,9 +254,9 @@ double scalbn( double x, int n );
 float scalbnf( float x, int n );
 long double scalbnl( long double x, int n );
 
-double scalbln( double x, long int * n );
-float scalblnf( float x, long int * n );
-long double scalblnl( long double x, long int * n );
+double scalbln( double x, long n );
+float scalblnf( float x, long n );
+long double scalblnl( long double x, long n );
 
 /* Power and absolute-value functions */
 
@@ -413,8 +413,8 @@ float nextafterf( float x, float y );
 long double nextafterl( long double x, long double y );
 
 /* As nextafter but with long double as second parameter. */
-double nexttoward( double x, double y );
-float nexttowardf( float x, float y );
+double nexttoward( double x, long double y );
+float nexttowardf( float x, long double y );
 long double nexttowardl( long double x, long double y );
 
 /* Maximum, minimum, and positive difference functions */

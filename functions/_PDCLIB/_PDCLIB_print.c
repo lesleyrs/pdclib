@@ -306,10 +306,11 @@ const char * _PDCLIB_print( const char * spec, struct _PDCLIB_status_t * status 
             /* Floating Point conversions */
             if ( status->flags & E_ldouble )
             {
-                long double value = va_arg( status->arg, long double );
-                _PDCLIB_fp_t fp;
-                _PDCLIB_fp_from_ldbl( &fp, value );
-                _PDCLIB_print_fp( &fp, status );
+                // TODO: removed long double printing to avoid missing builtins
+                // long double value = va_arg( status->arg, long double );
+                // _PDCLIB_fp_t fp;
+                // _PDCLIB_fp_from_ldbl( &fp, value );
+                // _PDCLIB_print_fp( &fp, status );
             }
             else
             {

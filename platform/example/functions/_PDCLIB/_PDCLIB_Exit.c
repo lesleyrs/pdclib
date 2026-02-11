@@ -12,21 +12,13 @@
 
 #ifndef REGTEST
 
+#include <js/syscalls.h>
 #include "pdclib/_PDCLIB_glue.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern _PDCLIB_Noreturn void _exit( int status ) _PDCLIB_NORETURN;
-
-#ifdef __cplusplus
-}
-#endif
 
 void _PDCLIB_Exit( int status )
 {
     _exit( status );
+    __builtin_trap();
 }
 
 #endif

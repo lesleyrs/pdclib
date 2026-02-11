@@ -17,15 +17,7 @@
 
 extern struct _PDCLIB_file_t * _PDCLIB_filelist;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern int unlink( const char * pathname );
-
-#ifdef __cplusplus
-}
-#endif
+// extern int unlink( const char * pathname );
 
 int remove( const char * pathname )
 {
@@ -42,12 +34,13 @@ int remove( const char * pathname )
         current = current->next;
     }
 
-    if ( ( rc = unlink( pathname ) ) == -1 )
-    {
+    /* if ( ( rc = unlink( pathname ) ) == -1 )
+    { */
         /* The 1:1 mapping in _PDCLIB_config.h ensures this works. */
-        *_PDCLIB_errno_func() = errno;
-    }
+        /* *_PDCLIB_errno_func() = errno;
+    } */
 
+    rc = -1; /* NOTE: temp */
     return rc;
 }
 

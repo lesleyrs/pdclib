@@ -14,18 +14,84 @@
 
 /* Declared implicitly by dlmalloc. This declaration avoids the warning. */
 #include <stdint.h>
+#include <stddef.h>
+#define LACKS_SYS_TYPES_H
+#define HAVE_MMAP 0
+/* #define LACKS_TIME_H */
+#define LACKS_UNISTD_H
+#define LACKS_SCHED_H
+#define LACKS_SYS_PARAM_H
+
 void * sbrk( intptr_t );
+
+/* https://nullprogram.com/blog/2025/04/19/ */
+void *sbrk(intptr_t size)
+{
+    size_t npages = (size + 0xffffu) >> 16;
+    size_t old    = __builtin_wasm_memory_grow(0, npages);
+    if (old == -1ul) {
+        return 0;
+    }
+    return (void *)(old << 16);
+}
+
+// TODO maybe use emscripten sbrk below, but don't use notify for js memory views as people can call __builtin_wasm_memory_grow directly
+// #include <assert.h>
+// #include <errno.h>
+
+// typedef struct { long long ll; long double ld; } max_align_t;
+// #define SBRK_ALIGNMENT (__alignof__(max_align_t))
+// #define WASM_PAGE_SIZE 65536
+
+// extern size_t __heap_base;
+// static uintptr_t sbrk_val = (uintptr_t)&__heap_base;
+
+// int wasm_resize_heap(size_t size) {
+//   size_t old_size = __builtin_wasm_memory_size(0) * WASM_PAGE_SIZE;
+//   assert(old_size < size);
+//   long diff = (size - old_size + WASM_PAGE_SIZE - 1) / WASM_PAGE_SIZE;
+//   size_t result = __builtin_wasm_memory_grow(0, diff);
+//   if (result != (size_t)-1) {
+//     /* Success, update JS (see https://github.com/WebAssembly/WASI/issues/82)
+//     emscripten_notify_memory_growth(0); */
+//     return 1;
+//   }
+//   return 0;
+// }
+
+// void *sbrk(intptr_t increment_) {
+//   uintptr_t increment = (uintptr_t)increment_;
+//   increment = (increment + (SBRK_ALIGNMENT-1)) & ~(SBRK_ALIGNMENT-1);
+
+//   uintptr_t *sbrk_ptr = (uintptr_t*)&sbrk_val;
+
+//   while (1) {
+//     uintptr_t old_brk = *sbrk_ptr;
+//     uintptr_t new_brk = old_brk + increment;
+//     if ((increment > 0 && new_brk <= old_brk)
+//      || (new_brk > __builtin_wasm_memory_size(0) << 16 && !wasm_resize_heap(new_brk))) {
+//       errno = ENOMEM;
+//       return (void*)-1;
+//     }
+//     *sbrk_ptr = new_brk;
+
+//     return (void*)old_brk;
+//   }
+// }
 
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_config.h"
-#include "pdclib/_PDCLIB_defguard.h"
 
 /* Have all functions herein use the dl* prefix */
 #define USE_DL_PREFIX 1
 
 /* Thread safety */
+#ifdef __XCC
+#define USE_LOCKS 0
+#else
 #define USE_LOCKS 1
+#endif
 
 /* Hide all functions herein as internal to the library */
 #define DLMALLOC_EXPORT _PDCLIB_LOCAL
@@ -4786,8 +4852,9 @@ void dlfree(void* mem) {
                 goto postaction;
               }
             }
-            else
+            else {
               goto erroraction;
+            }
           }
         }
 
@@ -4839,8 +4906,10 @@ void dlfree(void* mem) {
           goto postaction;
         }
       }
+#ifndef __XCC
     erroraction:
       USAGE_ERROR_ACTION(fm, p);
+#endif
     postaction:
       POSTACTION(fm);
     }

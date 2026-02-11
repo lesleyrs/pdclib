@@ -14,7 +14,7 @@
 
 #ifndef REGTEST
 
-extern char ** environ;
+/* extern char ** environ; */
 
 /* The standard states (7.22.4.6 (3), "the implementation shall behave
    as if no library function calls the getenv function." That is,
@@ -25,10 +25,10 @@ extern char ** environ;
 */
 errno_t getenv_s( size_t * _PDCLIB_restrict len, char * _PDCLIB_restrict value, rsize_t maxsize, const char * _PDCLIB_restrict name )
 {
-    size_t nlen;
+    /* size_t nlen;
     size_t index = 0;
     size_t vlen = 0;
-    char const * environ_value = "";
+    char const * environ_value = ""; */
     errno_t rc = -1;
 
     if ( name == NULL || maxsize == 0 || maxsize > RSIZE_MAX || value == NULL )
@@ -37,7 +37,7 @@ errno_t getenv_s( size_t * _PDCLIB_restrict len, char * _PDCLIB_restrict value, 
         return _PDCLIB_EINVAL;
     }
 
-    nlen = strlen( name );
+    /* nlen = strlen( name );
 
     while ( environ[ index ] != NULL )
     {
@@ -60,7 +60,7 @@ errno_t getenv_s( size_t * _PDCLIB_restrict len, char * _PDCLIB_restrict value, 
     if ( vlen < maxsize )
     {
         strcpy( value, environ_value );
-    }
+    } */
 
     return rc;
 }

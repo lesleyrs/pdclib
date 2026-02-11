@@ -13,7 +13,9 @@
 static int prep( _PDCLIB_bigint_t * mantissa, int exponent )
 {
     /* log10(2) to 128bit precision */
-    const long double log_10_2 = 0.30102999566398119521373889472449302l;
+    // TODO: swapped long double for double
+    // const long double log_10_2 = 0.30102999566398119521373889472449302l;
+    const double log_10_2 = 0.30102999566398119521373889472449302l;
 
     /* Get an approximation of the base 10 exponent we are looking at
        and make it fall one short in most cases as correction is easier

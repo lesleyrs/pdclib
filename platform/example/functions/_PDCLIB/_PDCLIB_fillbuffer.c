@@ -20,8 +20,7 @@
 extern "C" {
 #endif
 
-typedef long ssize_t;
-extern ssize_t read( int fd, void * buf, size_t count );
+#include <js/syscalls.h>
 
 #ifdef __cplusplus
 }
@@ -51,7 +50,7 @@ int _PDCLIB_fillbuffer( struct _PDCLIB_file_t * stream )
         /* The 1:1 mapping done in _PDCLIB_config.h ensures
            this works.
         */
-        *_PDCLIB_errno_func() = errno;
+        /* *_PDCLIB_errno_func() = errno; */
         /* Flag the stream */
         stream->status |= _PDCLIB_ERRORFLAG;
         return EOF;

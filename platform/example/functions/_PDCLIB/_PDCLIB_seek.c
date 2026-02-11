@@ -21,8 +21,7 @@
 extern "C" {
 #endif
 
-extern int64_t lseek64( int fd, _PDCLIB_int_least64_t offset, int whence );
-extern long lseek( int fd, long offset, int whence );
+#include <js/syscalls.h>
 
 #ifdef __cplusplus
 }
@@ -46,11 +45,7 @@ _PDCLIB_int_least64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int_
             break;
     }
 
-#ifdef __CYGWIN__
-    rc = lseek( stream->handle, offset, whence );
-#else
     rc = lseek64( stream->handle, offset, whence );
-#endif
 
     if ( rc != EOF )
     {
@@ -62,7 +57,7 @@ _PDCLIB_int_least64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int_
     }
 
     /* The 1:1 mapping in _PDCLIB_config.h ensures that this works. */
-    *_PDCLIB_errno_func() = errno;
+    /* *_PDCLIB_errno_func() = errno; */
     return EOF;
 }
 

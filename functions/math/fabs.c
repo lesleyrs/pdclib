@@ -9,35 +9,36 @@
 
 #ifndef REGTEST
 
-double fabs( double x )
-{
-    if ( isnan( x ) )
-    {
-        return NAN;
-    }
+// TODO -ffast-math warns for NAN usage
+// double fabs( double x )
+// {
+//     if ( isnan( x ) )
+//     {
+//         return NAN;
+//     }
 
-    return ( x < 0.0 ) ? -x : x;
-}
+//     return ( x < 0.0 ) ? -x : x;
+// }
 
-float fabsf( float x )
-{
-    if ( isnan( x ) )
-    {
-        return NAN;
-    }
+// float fabsf( float x )
+// {
+//     if ( isnan( x ) )
+//     {
+//         return NAN;
+//     }
 
-    return ( x < 0.0 ) ? -x : x;
-}
+//     return ( x < 0.0 ) ? -x : x;
+// }
 
-long double fabsl( long double x )
-{
-    if ( isnan( x ) )
-    {
-        return NAN;
-    }
+// long double fabsl( long double x )
+// {
+//     if ( isnan( x ) )
+//     {
+//         return NAN;
+//     }
 
-    return ( x < 0.0 ) ? -x : x;
-}
+//     return ( x < 0.0 ) ? -x : x;
+// }
 
 #endif
 

@@ -8,27 +8,19 @@
 
 #ifndef REGTEST
 
-#include "pdclib/_PDCLIB_defguard.h"
-
-#include "sys/time.h"
+#include <js/glue.h>
 
 /* See comments in _PDCLIB_config.h on the semantics of time_t. */
 
 time_t time( time_t * timer )
 {
-    struct timeval tv;
-
-    if ( gettimeofday( &tv, NULL ) == 0 )
+    time_t sec = JS_DateNow() / 1000;
+    if ( timer != NULL )
     {
-        if ( timer != NULL )
-        {
-            *timer = tv.tv_sec;
-        }
-
-        return tv.tv_sec;
+        *timer = sec;
     }
 
-    return -1;
+    return sec;
 }
 
 #endif

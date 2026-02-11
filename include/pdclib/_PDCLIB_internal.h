@@ -110,9 +110,14 @@ extern "C" {
 
 #define _PDCLIB_CHECKBUFFER( fh ) ( ( ( fh->bufidx == fh->bufend ) && ( fh->ungetidx == 0 ) ) ? _PDCLIB_fillbuffer( fh ) : 0 )
 
+// TODO swapped long double for double
+// #define _PDCLIB_GENERIC( func, x ) ( ( sizeof( x ) == sizeof( double ) ) ? _PDCLIB_ ## func ## d( x ) : \
+//                                      ( sizeof( x ) == sizeof( float ) ) ? _PDCLIB_ ## func ## f( x ) : \
+//                                      ( _PDCLIB_ ## func ## l( x ) ) )
+
 #define _PDCLIB_GENERIC( func, x ) ( ( sizeof( x ) == sizeof( double ) ) ? _PDCLIB_ ## func ## d( x ) : \
                                      ( sizeof( x ) == sizeof( float ) ) ? _PDCLIB_ ## func ## f( x ) : \
-                                     ( _PDCLIB_ ## func ## l( x ) ) )
+                                     ( _PDCLIB_ ## func ## d( x ) ) )
 
 /* -------------------------------------------------------------------------- */
 /* Preparing the length modifiers used in <inttypes.h>.                       */
@@ -468,11 +473,12 @@ _PDCLIB_LOCAL int _PDCLIB_getstream( struct _PDCLIB_file_t * stream );
 /* Backend for strtok and strtok_s (plus potential extensions like strtok_r). */
 _PDCLIB_LOCAL char * _PDCLIB_strtok( char * _PDCLIB_restrict s1, _PDCLIB_size_t * _PDCLIB_restrict s1max, const char * _PDCLIB_restrict s2, char ** _PDCLIB_restrict ptr );
 
+// TODO changed long double to doubles
 /* Conversion of exponent notation to floating point */
-_PDCLIB_LOCAL long double _PDCLIB_naive_etod( const char * s, char ** endptr );
+_PDCLIB_LOCAL double _PDCLIB_naive_etod( const char * s, char ** endptr );
 
 /* Conversion of hexadecimal notation to floating point */
-_PDCLIB_LOCAL long double _PDCLIB_naive_ptod( const char * s, char ** endptr );
+_PDCLIB_LOCAL double _PDCLIB_naive_ptod( const char * s, char ** endptr );
 
 /* -------------------------------------------------------------------------- */
 /* Declaration of math helper functions (implemented in functions/math).      */

@@ -11,10 +11,11 @@
 #include <ctype.h>
 #include <string.h>
 
-long double _PDCLIB_naive_etod( const char * s, char ** endptr )
+// TODO changed long double to doubles
+double _PDCLIB_naive_etod( const char * s, char ** endptr )
 {
     /* This is nowhere good enough, just a quick approximation */
-    long double rc = 0.0;
+    double rc = 0.0;
 
     while ( isdigit( (unsigned char)*s ) )
     {
@@ -23,8 +24,8 @@ long double _PDCLIB_naive_etod( const char * s, char ** endptr )
 
     if ( *s == '.' )
     {
-        long double fraction = 0.0;
-        long double scale = 1.0;
+        double fraction = 0.0;
+        double scale = 1.0;
         ++s;
 
         while ( isdigit( (unsigned char)*s ) )
@@ -39,8 +40,8 @@ long double _PDCLIB_naive_etod( const char * s, char ** endptr )
     if ( tolower( (unsigned char)*s ) == 'e' )
     {
         char sign = '+';
-        long double exp = 0.0;
-        long double scale = 1.0;
+        double exp = 0.0;
+        double scale = 1.0;
         ++s;
 
         if ( *s == '-' )

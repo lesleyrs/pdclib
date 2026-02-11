@@ -8,18 +8,12 @@
 
 #ifndef REGTEST
 
-#include "sys/times.h"
+#include <js/glue.h>
 
 clock_t clock( void )
 {
-    struct tms buf;
-
-    if ( times( &buf ) != ( clock_t )-1 )
-    {
-        return buf.tms_utime + buf.tms_stime;
-    }
-
-    return -1;
+    /* ms to us for CLOCKS_PER_SEC */
+    return JS_performanceNow() * 1000;
 }
 
 #endif

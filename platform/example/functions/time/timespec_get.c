@@ -8,23 +8,18 @@
 
 #ifndef REGTEST
 
-#include "pdclib/_PDCLIB_defguard.h"
-
-#include "sys/time.h"
+#include <js/glue.h>
 
 int timespec_get( struct timespec * ts, int base )
 {
     if ( base == TIME_UTC )
     {
         /* We can make do with a really thin wrapper here. */
-        struct timeval tv;
-
-        if ( gettimeofday( &tv, NULL ) == 0 )
-        {
-            ts->tv_sec = tv.tv_sec;
-            ts->tv_nsec = tv.tv_usec * 1000;
-            return base;
-        }
+        double now = JS_DateNow();
+        ts->tv_sec = now / 1000;
+        long remainder_ms = now - (double)ts->tv_sec * 1000;
+        ts->tv_nsec = remainder_ms * 1e6;
+        return base;
     }
 
     /* Not supporting any other time base than TIME_UTC for now. */

@@ -24,7 +24,6 @@
 #endif
 
 #include "pdclib/_PDCLIB_glue.h"
-#include "pdclib/_PDCLIB_defguard.h"
 
 #include "pdclib/_PDCLIB_platform_errno.h"
 
@@ -52,16 +51,17 @@ int _PDCLIB_rename( const char * oldpath, const char * newpath )
     /* Whether existing newpath is overwritten is implementation-
        defined. This system call *does* overwrite.
     */
-    if ( renameat( AT_FDCWD, oldpath, AT_FDCWD, newpath ) != 0 )
-    {
+    /* if ( renameat( AT_FDCWD, oldpath, AT_FDCWD, newpath ) != 0 )
+    { */
         /* The 1:1 mapping in _PDCLIB_config.h ensures this works. */
-        *_PDCLIB_errno_func() = errno;
+        /* *_PDCLIB_errno_func() = errno;
         return -1;
     }
     else
     {
         return 0;
-    }
+    } */
+    return 0;
 }
 
 #endif
