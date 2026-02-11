@@ -16,13 +16,12 @@
 extern "C" {
 #endif
 
-#define PATH_MAX 4096
-static char * realpath( const char * file_name, char * resolved_name )
+static char *strdup(const char *s)
 {
-    if (!file_name) return NULL;
-    strncpy(resolved_name, file_name, PATH_MAX - 1);
-    resolved_name[PATH_MAX - 1] = '\0';
-    return resolved_name;
+	size_t l = strlen(s);
+	char *d = malloc(l+1);
+	if (!d) return NULL;
+	return memcpy(d, s, l+1);
 }
 
 #ifdef __cplusplus
@@ -31,26 +30,8 @@ static char * realpath( const char * file_name, char * resolved_name )
 
 char * _PDCLIB_realpath( const char * path )
 {
-    /* TODO: PATH_MAX but that seems difficult to come by */
-    char buffer[ PATH_MAX ];
-    char * resolved_name;
-
-    if ( realpath( path, buffer ) == NULL )
-    {
-        return NULL;
-    }
-
-    /* Need to do our own alloc-and-copy here, as realpath()
-       would be linked to the system malloc(), and if our
-       fclose() would run our free() on someone else's memory,
-       results are more interesting than we would like to see.
-    */
-    if ( ( resolved_name = malloc( strlen( buffer + 1 ) ) ) == NULL )
-    {
-        return NULL;
-    }
-
-    return strcpy( resolved_name, buffer );
+    if (!path) return NULL;
+    return strdup(path);
 }
 
 #endif
